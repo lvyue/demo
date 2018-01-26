@@ -4,3 +4,6 @@
 [submodule "sh/lua/lib/lua-resty-string"]
 	path = sh/lua/lib/lua-resty-string
 	url = https://github.com/openresty/lua-resty-string.git
+[submodule "sh/lua/lib/lua-resty-hmac"]
+	path = sh/lua/lib/lua-resty-hmac
+	url = https://github.com/jkeys089/lua-resty-hmac.git

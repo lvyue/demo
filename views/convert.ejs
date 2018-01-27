@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>
+    <%= title %>
+  </title>
+  <link rel='stylesheet' href='/css/style.css' />
+</head>
+
+<body>
+  <h1>
+    <%= title %>
+  </h1>
+  <div>
+    <% questions.forEach((que,index) => {%>
+      <div class="question">
+        <div class="title">
+          <%- index+1%>.
+            <%- que.content %>
+              <% if (que.category > 0 ) { %>
+                <span>
+                  [
+                  <%= question_categories[que.category] %>]
+                </span>
+                <%}%>
+                  <% if (que.score > 0 ) { %>
+                    <span>
+                      （
+                      <%= que.score %>分）
+                    </span>
+                    <%}%>
+                      <% if (que.answer.length > 0 ) { %>
+                        <span>
+                          （答案：
+                          <%- que.answer.join(",")%>）
+                        </span>
+                        <%}%>
+        </div>
+        <div class="options">
+          <% que.options.forEach(op=>{ %>
+            <div class="option">
+              <%- op%>
+            </div>
+
+            <% })%>
+        </div>
+        <br>
+        <br>
+        <br>
+      </div>
+      <% }); %>
+  </div>
+</body>
+
+</html>

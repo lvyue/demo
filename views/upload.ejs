@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>
+    <%= title %>
+  </title>
+  <link rel='stylesheet' href='/css/style.css' />
+</head>
+
+<body>
+  <h1>
+    <%= title %>
+  </h1>
+  <div>
+    <form method="post" enctype="multipart/form-data" action="/upload">
+      <input type="file" name="word" accept="application/*">
+      <input type="submit">
+    </form>
+    <a href="/upload/origin/demo.docx" download="试题模板">试题模板</a>
+  </div>
+</body>
+
+</html>

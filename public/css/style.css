@@ -15,3 +15,7 @@ a {
 thead td {
     font-weight: 600;
 }
+
+.option {
+    padding: 10px 8px;
+}

@@ -150,16 +150,15 @@ router.get('/convert/:file', (req, res) => {
 								if (sourcePath.toLowerCase().endsWith('.wmf')) {
 									const nameUUID = UUID.v1();
 									const destFileName = `${nameUUID}.png`;
-									const tmpFilePath = path.join(previewPath, sourcePath.replace(/.*(\.[a-zA-Z0-9]+)$/, `tmp-${nameUUID}$1`));
-									const tmpSVGPath = path.join(previewPath, `tmp-${nameUUID}.svg`);
-									const destFilePath = path.join(previewPath, destFileName);
-									_htmls.push(`<img src="/upload/preview/${destFileName}" style="${style}" >`);
+									const tmpFilePath = path.join(destFolderPath, sourcePath.replace(/.*(\.[a-zA-Z0-9]+)$/, `${nameUUID}$1`));
+									const destFilePath = path.join(destFolderPath, destFileName);
+									_htmls.push(`<img src="${destFileName}" style="${style}" >`);
 									fs.writeFile(tmpFilePath, word.readFile(path.join('word', sourcePath)), err => {
 										if (err) {
 											console.error('', err);
 											return;
 										}
-										let wmf2svg = spawn('wmf2svg', [tmpFilePath, '-o', tmpSVGPath]);
+										let wmf2svg = spawn('wmf2gd', ['-t', 'png', '-o', destFilePath, '--maxpect', tmpFilePath]);
 
 										// 捕获标准输出并将其打印到控制台 
 										wmf2svg.stdout.on('data', function (data) {
@@ -172,21 +171,6 @@ router.get('/convert/:file', (req, res) => {
 										// 注册子进程关闭事件 
 										wmf2svg.on('exit', function (code, signal) {
 											console.log('child process eixt ,exit:' + code);
-											if (code === 0) {
-												let convert = spawn('convert', [tmpSVGPath, destFilePath]);
-												// 捕获标准输出并将其打印到控制台 
-												convert.stdout.on('data', function (data) {
-													console.log('standard output:\n' + data);
-												});
-												// 捕获标准错误输出并将其打印到控制台 
-												convert.stderr.on('data', function (data) {
-													console.log('standard error output:\n' + data);
-												});
-												// 注册子进程关闭事件 
-												convert.on('exit', function (code, signal) {
-													console.log('child process eixt ,exit:' + code);
-												});
-											}
 										});
 									}); // 提取资源
 								}
@@ -279,16 +263,15 @@ router.get('/convert/:file', (req, res) => {
 								if (sourcePath.toLowerCase().endsWith('.wmf')) {
 									const nameUUID = UUID.v1();
 									const destFileName = `${nameUUID}.png`;
-									const tmpFilePath = path.join(previewPath, sourcePath.replace(/.*(\.[a-zA-Z0-9]+)$/, `tmp-${nameUUID}$1`));
-									const tmpSVGPath = path.join(previewPath, `tmp-${nameUUID}.svg`);
-									const destFilePath = path.join(previewPath, destFileName);
-									_htmls.push(`<img src="/upload/preview/${destFileName}" style="${style}" >`);
+									const tmpFilePath = path.join(destFolderPath, sourcePath.replace(/.*(\.[a-zA-Z0-9]+)$/, `${nameUUID}$1`));
+									const destFilePath = path.join(destFolderPath, destFileName);
+									_htmls.push(`<img src="${destFileName}" style="${style}" >`);
 									fs.writeFile(tmpFilePath, word.readFile(path.join('word', sourcePath)), err => {
 										if (err) {
 											console.error('', err);
 											return;
 										}
-										let wmf2svg = spawn('wmf2svg', [tmpFilePath, '-o', tmpSVGPath]);
+										let wmf2svg = spawn('wmf2gd', ['-t', 'png', '-o', destFilePath, '--maxpect', tmpFilePath]);
 
 										// 捕获标准输出并将其打印到控制台 
 										wmf2svg.stdout.on('data', function (data) {
@@ -301,21 +284,6 @@ router.get('/convert/:file', (req, res) => {
 										// 注册子进程关闭事件 
 										wmf2svg.on('exit', function (code, signal) {
 											console.log('child process eixt ,exit:' + code);
-											if (code === 0) {
-												let convert = spawn('convert', [tmpSVGPath, destFilePath]);
-												// 捕获标准输出并将其打印到控制台 
-												convert.stdout.on('data', function (data) {
-													console.log('standard output:\n' + data);
-												});
-												// 捕获标准错误输出并将其打印到控制台 
-												convert.stderr.on('data', function (data) {
-													console.log('standard error output:\n' + data);
-												});
-												// 注册子进程关闭事件 
-												convert.on('exit', function (code, signal) {
-													console.log('child process eixt ,exit:' + code);
-												});
-											}
 										});
 									}); // 提取资源
 								}

@@ -151,8 +151,8 @@ router.get('/convert/:file', (req, res) => {
 								if (sourcePath.toLowerCase().endsWith('.wmf')) {
 									const nameUUID = UUID.v1();
 									const destFileName = `${nameUUID}.png`;
-									const tmpFilePath = path.join(destFolderPath, sourcePath.replace(/.*(\.[a-zA-Z0-9]+)$/, `${nameUUID}$1`));
-									const destFilePath = path.join(destFolderPath, destFileName);
+									const tmpFilePath = path.join(previewPath, sourcePath.replace(/.*(\.[a-zA-Z0-9]+)$/, `${nameUUID}$1`));
+									const destFilePath = path.join(previewPath, destFileName);
 									_htmls.push(`<img src="${destFileName}" style="${style}" >`);
 									fs.writeFile(tmpFilePath, word.readFile(path.join('word', sourcePath)), err => {
 										if (err) {
@@ -256,8 +256,8 @@ router.get('/convert/:file', (req, res) => {
 								if (sourcePath.toLowerCase().endsWith('.wmf')) {
 									const nameUUID = UUID.v1();
 									const destFileName = `${nameUUID}.png`;
-									const tmpFilePath = path.join(destFolderPath, sourcePath.replace(/.*(\.[a-zA-Z0-9]+)$/, `${nameUUID}$1`));
-									const destFilePath = path.join(destFolderPath, destFileName);
+									const tmpFilePath = path.join(previewPath, sourcePath.replace(/.*(\.[a-zA-Z0-9]+)$/, `${nameUUID}$1`));
+									const destFilePath = path.join(previewPath, destFileName);
 									_htmls.push(`<img src="${destFileName}" style="${style}" >`);
 									fs.writeFile(tmpFilePath, word.readFile(path.join('word', sourcePath)), err => {
 										if (err) {

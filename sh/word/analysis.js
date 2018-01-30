@@ -4,8 +4,8 @@ const XML = require('xml-js');
 const _ = require('lodash');
 const fs = require('fs');
 const UUID = require('uuid');
-const spawn = require('child_process').spawn;
-const gm = require('gm');
+const wmf = require('libwmf');
+const debug = require('debug')('word');
 
 const destFolderPath = __dirname;
 const filePath = path.join(destFolderPath, 'wordtestpaper.docx');
@@ -90,22 +90,14 @@ body.forEach(line => {
 								_htmls.push(`<img src="${destFileName}" style="${style}" >`);
 								fs.writeFile(tmpFilePath, word.readFile(path.join('word', sourcePath)), err => {
 									if (err) {
-										console.error('', err);
+										debug(err);
 										return;
 									}
-									let wmf2svg = spawn('wmf2gd', ['-t', 'png', '-o', destFilePath, '--maxpect', tmpFilePath]);
-
-									// 捕获标准输出并将其打印到控制台 
-									wmf2svg.stdout.on('data', function (data) {
-										console.log('standard output:\n' + data);
-									});
-									// 捕获标准错误输出并将其打印到控制台 
-									wmf2svg.stderr.on('data', function (data) {
-										console.log('standard error output:\n' + data);
-									});
-									// 注册子进程关闭事件 
-									wmf2svg.on('exit', function (code, signal) {
-										console.log('child process eixt ,exit:' + code);
+									wmf(tmpFilePath).max().toPNG(destFilePath, err => {
+										if (err) {
+											debug(err);
+											return;
+										}
 									});
 								}); // 提取资源
 							}
@@ -214,22 +206,14 @@ body.forEach(line => {
 								_htmls.push(`<img src="${destFileName}" style="${style}" >`);
 								fs.writeFile(tmpFilePath, word.readFile(path.join('word', sourcePath)), err => {
 									if (err) {
-										console.error('', err);
+										debug(err);
 										return;
 									}
-									let wmf2svg = spawn('wmf2gd', ['-t', 'png', '-o', destFilePath, '--maxpect', tmpFilePath]);
-
-									// 捕获标准输出并将其打印到控制台 
-									wmf2svg.stdout.on('data', function (data) {
-										console.log('standard output:\n' + data);
-									});
-									// 捕获标准错误输出并将其打印到控制台 
-									wmf2svg.stderr.on('data', function (data) {
-										console.log('standard error output:\n' + data);
-									});
-									// 注册子进程关闭事件 
-									wmf2svg.on('exit', function (code, signal) {
-										console.log('child process eixt ,exit:' + code);
+									wmf(tmpFilePath).max().toPNG(destFilePath, err => {
+										if (err) {
+											debug(err);
+											return;
+										}
 									});
 								}); // 提取资源
 							}
@@ -241,7 +225,7 @@ body.forEach(line => {
 		}
 	}
 });
-console.log('Questions:', questions);
+debug('Questions:', questions);
 
 // fs.writeFile(path.join(destFolderPath, 'image2.wmf'), word.readFile('word/media/image2.wmf'));
 // fs.writeFile(path.join(destFolderPath, 'image3.wmf'), word.readFile('word/media/image3.wmf'));

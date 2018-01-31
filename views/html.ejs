@@ -13,7 +13,7 @@
     <%= path %>
   </h1>
   <div>
-    <iframe src="/upload/preview/<%-path%>/index.html" frameborder="0" style="width:100%;min-height:1000px;"></iframe>
+    <iframe src="/upload/preview/<%-path%>/index.<%-format=='1' ? 'html' : 'pdf' %>" frameborder="0" style="width:100%;min-height:1000px;"></iframe>
   </div>
 </body>
 

@@ -16,8 +16,13 @@
     <form method="post" enctype="multipart/form-data" action="/upload">
       类型：
       <select name="type" id="">
-        <option value="1">解析</option>
-        <option value="2">转换</option>
+        <option value="1">解析试题模板</option>
+        <option value="2">转换Office</option>
+      </select>
+      <br> 转换类型：
+      <select name="format" id="">
+        <option value="1">html</option>
+        <option value="2">pdf</option>
       </select>
       <br> 文件：
       <input type="file" name="word" accept="application/*">

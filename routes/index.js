@@ -306,23 +306,26 @@ router.get('/upload', (req, res) => {
 router.post('/upload', upload.single('word'), (req, res) => {
 	const file = req.file;
 	const type = req.body.type || '1';
-	res.redirect(`/${type == 1 ? 'convert':'html'}/${file.filename}`);
+	const format = req.body.format || '1';
+	res.redirect(`/${type == 1 ? 'convert':'html'}/${file.filename}?f=${format}`);
 });
 
 router.get('/html/:source', (req, res) => {
 	const source = req.params.source;
+	const format = req.query.f || '1';
 	const srcFilePath = path.join(originPath, source);
-	const destFilePath = path.join(previewPath, source, 'index.html');
+	const destFilePath = path.join(previewPath, source, `index.${format == '1'?'html':'pdf'}`);
 	debug('srcFilePath:', srcFilePath);
 	debug('destFilePath:', destFilePath);
-	let proc = spawn('unoconv', ['-f', 'html', '--output=' + destFilePath, srcFilePath]);
+	let proc = spawn('unoconv', ['-f', format == '1' ? 'html' : 'pdf', '--output=' + destFilePath, srcFilePath]);
 	proc.once('error', err => {
 		debug(err);
 	});
 	proc.on('exit', () => {
 		return res.render('html', {
 			title: 'Office To Html',
-			path: source
+			path: source,
+			format: format
 		});
 	});
 

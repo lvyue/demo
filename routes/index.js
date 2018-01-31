@@ -12,7 +12,7 @@ const fs = require('fs');
 const UUID = require('uuid');
 const wmf = require('libwmf');
 const debug = require('debug')('word');
-const spawn = require('cross-spawn');
+const unoconv = require('lib-unoconv');
 
 
 const destFolderPath = path.join(__dirname, '../upload');
@@ -317,11 +317,10 @@ router.get('/html/:source', (req, res) => {
 	const destFilePath = path.join(previewPath, source, `index.${format == '1'?'html':'pdf'}`);
 	debug('srcFilePath:', srcFilePath);
 	debug('destFilePath:', destFilePath);
-	let proc = spawn('unoconv', ['-f', format == '1' ? 'html' : 'pdf', '--output=' + destFilePath, srcFilePath]);
-	proc.once('error', err => {
+	unoconv.convert(srcFilePath, format == '1' ? 'html' : 'pdf', {
+		out: destFilePath
+	}, (err) => {
 		debug(err);
-	});
-	proc.on('exit', () => {
 		return res.render('html', {
 			title: 'Office To Html',
 			path: source,

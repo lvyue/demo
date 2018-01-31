@@ -12,6 +12,7 @@ const fs = require('fs');
 const UUID = require('uuid');
 const wmf = require('libwmf');
 const debug = require('debug')('word');
+const spawn = require('cross-spawn');
 
 
 const destFolderPath = path.join(__dirname, '../upload');
@@ -301,8 +302,33 @@ router.get('/upload', (req, res) => {
 		title: '文件上传'
 	});
 });
+
 router.post('/upload', upload.single('word'), (req, res) => {
 	const file = req.file;
-	res.redirect(`/convert/${file.filename}`);
+	const type = req.body.type || '1';
+	res.redirect(`/${type == 1 ? 'convert':'html'}/${file.filename}`);
 });
+
+router.get('/html/:source', (req, res) => {
+	const source = req.params.source;
+	const srcFilePath = path.join(originPath, source);
+	const destFilePath = path.join(previewPath, source, 'index.html');
+	debug('srcFilePath:', srcFilePath);
+	debug('destFilePath:', destFilePath);
+	let proc = spawn('unoconv', ['-f', 'html', '--output=' + destFilePath, srcFilePath]);
+	proc.once('error', err => {
+		debug(err);
+	});
+	proc.on('exit', () => {
+		return res.render('html', {
+			title: 'Office To Html',
+			path: source
+		});
+	});
+
+});
+
+
+
+
 module.exports = router;

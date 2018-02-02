@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>
+    <%= title %>
+  </title>
+  <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+  <header class="navbar navbar-inverse navbar-static-top">
+    <div class="container">
+      <div class="navbar-header">
+        <span class="navbar-brand">
+          <%= title %>
+        </span>
+      </div>
+      <div class="navbar-collapse collapse">
+        &nbsp;
+      </div>
+    </div>
+  </header>
+  <div class="container">
+    <div class="row">
+      <iframe src="/upload/preview/<%-path%>/index.<%-format=='1' ? 'html' : 'pdf' %>" frameborder="0" style="width:100%;min-height:1000px;"></iframe>
+    </div>
+  </div>
+</body>
+
+</html>

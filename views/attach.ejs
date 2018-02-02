@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>示例功能</title>
+  <link rel='stylesheet' href='/css/style.css' />
+  <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+  <h1>文件列表</h1>
+  <div>
+    <table class="table" border="0" cellspacing="0">
+      <thead>
+        <tr>
+          <td>序号</td>
+          <td>名称</td>
+          <td>作者</td>
+          <td>大小</td>
+          <td>操作</td>
+        </tr>
+      </thead>
+      <tbody>
+        <% attachments.forEach( (attach,index) => { %>
+          <tr>
+            <td>
+              <%= index+1%>
+            </td>
+            <td>
+              <%= attach.name %>
+            </td>
+            <td>
+              <%= attach.author %>
+            </td>
+            <td>
+              <%= attach.size %>
+            </td>
+            <td>
+              <a href="/downloads/<%= attach._id %>" class="btn" target="_blank">下载</a>
+            </td>
+          </tr>
+          <% } )%>
+      </tbody>
+    </table>
+  </div>
+  <script src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+
+</html>

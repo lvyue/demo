@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>
+    <%= title %>
+  </title>
+  <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+  <header class="navbar navbar-inverse navbar-static-top">
+    <div class="container">
+      <div class="navbar-header">
+        <span class="navbar-brand">
+          <%= title %>
+        </span>
+      </div>
+      <div class="navbar-collapse collapse">
+        &nbsp;
+      </div>
+    </div>
+  </header>
+  <div class="container">
+    <div class="row">
+      <% questions.forEach((que,index) => {%>
+        <div class="question">
+          <div class="title">
+            <%- index+1%>.
+              <%- que.content %>
+                <% if (que.category > 0 ) { %>
+                  <span>
+                    [
+                    <%= question_categories[que.category] %>]
+                  </span>
+                  <%}%>
+                    <% if (que.score > 0 ) { %>
+                      <span>
+                        （
+                        <%= que.score %>分）
+                      </span>
+                      <%}%>
+                        <% if (que.answer.length > 0 ) { %>
+                          <span>
+                            （答案：
+                            <%- que.answer.join(",")%>）
+                          </span>
+                          <%}%>
+          </div>
+          <div class="options">
+            <% que.options.forEach(op=>{ %>
+              <div class="option">
+                <%- op%>
+              </div>
+
+              <% })%>
+          </div>
+          <br>
+          <br>
+          <br>
+        </div>
+        <% }); %>
+    </div>
+  </div>
+</body>
+
+</html>

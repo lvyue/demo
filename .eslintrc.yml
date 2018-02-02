@@ -1,13 +1,16 @@
 env:
+  browser: true
+  commonjs: true
   es6: true
   node: true
+  jquery: true
 extends: 'eslint:recommended'
 parserOptions:
   sourceType: module
 rules:
   indent:
     - error
-    - tab
+    - 4
   linebreak-style:
     - error
     - unix
@@ -17,3 +20,4 @@ rules:
   semi:
     - error
     - always
+  no-console: 0

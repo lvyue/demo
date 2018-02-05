@@ -11,4 +11,8 @@ router.get('/:category/:path', (req, res) => {
     });
 });
 
+router.get('*', (req, res) => {
+    res.redirect(`/rule/${req.path}`);
+});
+
 module.exports = router;

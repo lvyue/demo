@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
+var rule = require('./routes/rule');
 var filter = require('./routes/filter');
 var convert = require('./routes/convert');
 var analyze = require('./routes/analyze');
@@ -31,7 +32,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/upload', express.static(path.join(__dirname, 'upload')));
 
 app.use('/', index);
-// app.use('/users', users);
+app.use('/rules', rule);
 app.use('/filter', filter);
 app.use('/convert', convert);
 app.use('/analyze', analyze);

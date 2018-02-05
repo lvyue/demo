@@ -6,11 +6,13 @@ const path = require('path');
 const debug = require('debug')('filter');
 let sheet = xlsx.parse(path.join(__dirname, '../data/keywords.xls'));
 const tire = {};
+let keywords = null;
 if (sheet && sheet.length > 0) {
     let data = sheet[0].data,
         characters, p, m, code;
     if (Array.isArray(data)) {
         data.splice(0, 1);
+        keywords = data;
         data.forEach(row => {
             p = tire;
             characters = row[0].split(''); // 拆分对象
@@ -30,13 +32,21 @@ if (sheet && sheet.length > 0) {
         });
     }
 }
+sheet = null;
 debug('Tire Size:', (JSON.stringify(tire).length / 1024 / 1024).toFixed(4), '(MB)');
 
 
 /* GET users listing. */
 router.get('/', function (req, res) {
-    return res.render('filter', {
+    return res.render('filter/index', {
         title: '内容过滤',
+    });
+});
+
+router.get('/keywords', function (req, res) {
+    return res.render('filter/keywords', {
+        title: '过滤关键字',
+        keywords: keywords
     });
 });
 

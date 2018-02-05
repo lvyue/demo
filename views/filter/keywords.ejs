@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>
+    <%- title %>
+  </title>
+  <link rel='stylesheet' href='/css/style.css' />
+  <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+  <h1>
+    <%- title %>
+  </h1>
+  <div>
+    <table class="table" border="0" cellspacing="0">
+      <thead>
+        <tr>
+          <td>序号</td>
+          <td>关键字</td>
+          <td>类型</td>
+        </tr>
+      </thead>
+      <tbody>
+        <% keywords&&keywords.forEach( (keyword,index) => { %>
+          <tr>
+            <td>
+              <%= index+1%>
+            </td>
+            <td>
+              <%= keyword[0] %>
+            </td>
+            <td>
+              <%= keyword[1] %>
+            </td>
+          </tr>
+          <% } )%>
+      </tbody>
+    </table>
+  </div>
+  <script src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+
+</html>

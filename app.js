@@ -5,10 +5,10 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
-var users = require('./routes/users');
 var filter = require('./routes/filter');
 var convert = require('./routes/convert');
 var analyze = require('./routes/analyze');
+var download = require('./routes/download');
 
 var app = express();
 
@@ -32,9 +32,10 @@ app.use('/upload', express.static(path.join(__dirname, 'upload')));
 
 app.use('/', index);
 // app.use('/users', users);
-// app.use('/filter', filter);
+app.use('/filter', filter);
 app.use('/convert', convert);
 app.use('/analyze', analyze);
+app.use('/downloads', download);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -44,7 +45,7 @@ app.use(function (req, res, next) {
 });
 
 // error handler
-app.use(function (err, req, res, next) {
+app.use(function (err, req, res) {
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};

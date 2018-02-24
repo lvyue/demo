@@ -10,6 +10,7 @@ var filter = require('./routes/filter');
 var convert = require('./routes/convert');
 var analyze = require('./routes/analyze');
 var download = require('./routes/download');
+var resource = require('./routes/resource');
 
 var app = express();
 
@@ -37,6 +38,7 @@ app.use('/filter', filter);
 app.use('/convert', convert);
 app.use('/analyze', analyze);
 app.use('/downloads', download);
+app.use('/resources', resource);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

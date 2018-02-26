@@ -23,4 +23,4 @@ let config = {
 let _servers = config.database.servers.join(',');
 let _opts = config.database.query ? `?${config.database.query}` : '';
 config.dbURI = `mongodb://${config.database.user}:${config.database.pass}@${_servers}/${config.database.db}${_opts}`;
-module.exports = Object.freeze(_.clone(config));
+module.exports = Object.freeze(config);

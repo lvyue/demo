@@ -6,6 +6,12 @@
         <%= title %>
     </title>
     <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .item em {
+            color: #f00 !important;
+            font-style: normal;
+        }
+    </style>
 </head>
 
 <body>
@@ -25,7 +31,7 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="input-group">
-                    <input type="text" class="form-control input-lg" placeholder="" name="q" v-model="q" @keyup.enter="search()">
+                    <input type="text" class="form-control input-lg" placeholder="" name="q" v-model="q" @keyup.enter="reload()">
                     <span class="input-group-btn">
                         <button class="btn btn-success btn-lg" type="button" @click="search()" :disabled="searching === 1">搜索资源</button>
                     </span>
@@ -66,17 +72,17 @@
                         <span class="text-success">{{total}}</span>条记录</div>
                 </div>
             </div>
-            <div class="col-xs-12" v-for="resource in resources" :key="resource._id" style="border-bottom: 1px solid #cccccc; margin-bottom:15px;">
+            <div class="col-xs-12 item" v-for="resource in resources" :key="resource._id" style="border-bottom: 1px solid #cccccc; margin-bottom:15px;">
                 <div class="row">
                     <div class="col-xs-12">
-                        <a class="h4">{{resource._source.name}}</a>
+                        <a class="h4" v-html="resource.highlight && resource.highlight.name ?resource.highlight.name[0]:resource._source.name"></a>
                         <span class="label" :class="{'label-primary':resource._source.category% 5 == 4,'label-info':resource._source.category% 5 == 3,'label-warning':resource._source.category% 5 == 2,'label-danger':resource._source.category% 5 == 1,'label-success':resource._source.category% 5 == 0}">{{categories[resource._source.category]}}</span>
                         <span class="pull-right">评分：{{resource._source.grade.toFixed(1)}}分</span>
                     </div>
                     <div class="col-xs-12 tag" style="padding-top: 5px;padding-bottom: 5px;">
                         <span style="margin-right:8px;"> 标签：{{resource._source.labels.join(',')}} </span>
                     </div>
-                    <div class="col-xs-12" v-html="resource._source.desc"></div>
+                    <div class="col-xs-12" v-html="resource.highlight && resource.highlight.desc ?resource.highlight.desc[0]:resource._source.desc"></div>
                     <div class="col-xs-12 tag" style="padding-top: 5px;padding-bottom: 5px;">
                         <span style="margin-right:8px;">{{resource._source.labels.join(',')}}</span>|
                         <span style="margin-right:8px; margin-left:8px;">{{resource._source.pageview_num}}次浏览</span>|

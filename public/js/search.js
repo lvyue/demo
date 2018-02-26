@@ -59,6 +59,11 @@ new Vue({
                     }, 1000);
                 }
             });
+        },
+        reload: function () {
+            var that = this;
+            that.page = 1;
+            that.search();
         }
     }
 });

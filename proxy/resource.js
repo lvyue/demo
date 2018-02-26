@@ -32,5 +32,111 @@ RP.insert = function (resource, cb) {
 };
 
 
+RP.query = function (query, select, options, callback) {
+    if (_.isFunction(query)) {
+        callback = query;
+        query = {
+            status: {
+                '$ne': -1
+            }
+        };
+        select = {
+            history: 0
+        };
+        options = {};
+    }
+    if (_.isFunction(select)) {
+        callback = select;
+        select = {
+            history: 0
+        };
+        options = {};
+    }
+    if (_.isFunction(options)) {
+        callback = options;
+        options = {};
+    }
+    const cursor = Resource.find(query, select);
+    if (options.populate) {
+        cursor.populate(options.populate);
+    }
+    if (options.sort) {
+        cursor.sort(options.sort);
+    }
+    if (options.skip) {
+        cursor.skip(options.skip);
+    }
+    if (options.limit) {
+        cursor.limit(options.limit);
+    }
+    cursor.exec(callback);
+};
+
+RP.findOne = function (query, select, options, callback) {
+    if (_.isFunction(query)) {
+        callback = query;
+        query = {
+            'status': {
+                $ne: -1
+            }
+        };
+        select = {
+            history: 0
+        };
+        options = {};
+    } else if (_.isString(query)) {
+        query = {
+            '_id': query,
+            'status': {
+                $ne: -1
+            }
+        };
+    } else if (!_.isObject(query)) {
+        query = {
+            'status': {
+                $ne: -1
+            }
+        };
+    }
+    if (_.isFunction(select)) {
+        callback = select;
+        select = {
+            history: 0
+        };
+        options = {};
+    } else if (!_.isObject(select)) {
+        select = {
+            history: 0
+        };
+    }
+    if (_.isFunction(options)) {
+        callback = options;
+        options = {};
+    } else if (!_.isObject(options)) {
+        options = {};
+    }
+
+    if (!_.isFunction(callback)) {
+        callback = _.noop;
+    }
+    const cursor = Resource.findOne(query, select);
+    if (options.populate) {
+        cursor.populate(options.populate);
+    }
+    cursor.exec(callback);
+};
+
+//
+RP.count = function (query, callback) {
+    if (_.isFunction(query)) {
+        callback = query;
+        query = {};
+    }
+    if (!_.isFunction(callback)) {
+        callback = _.noop;
+    }
+    Resource.count(query, callback);
+};
+
 
 module.exports = RP;

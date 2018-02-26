@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" rel="stylesheet"> -->
+</head>
+
+<body>
+    <header class="navbar navbar-inverse navbar-static-top">
+        <div class="container">
+            <div class="navbar-header">
+                <span class="navbar-brand">
+                    <%= title %>
+                </span>
+            </div>
+            <div class="navbar-collapse collapse">
+                &nbsp;
+            </div>
+        </div>
+    </header>
+    <div class="container" id="app">
+        <div class="row">
+            <table class="table" border="0" cellspacing="0">
+                <thead>
+                    <tr>
+                        <td>序号</td>
+                        <td>名称</td>
+                        <td>类型</td>
+                        <td>下载分</td>
+                        <td>得分</td>
+                        <td>标签</td>
+                        <td>发布</td>
+                        <td>浏览量</td>
+                        <td>下载量</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% resources.forEach( (resource,index) => { %>
+                        <tr>
+                            <td>
+                                <%= index+1 + (page -1)*10%>
+                            </td>
+                            <td>
+                                <%= resource.name %>
+                            </td>
+
+                            <td>
+                                <%= categories[resource.category] %>
+                            </td>
+                            <td>
+                                <%= resource.score %>
+                            </td>
+                            <td>
+                                <%= resource.grade.toFixed(1) %>
+                            </td>
+                            <td>
+                                <%= resource.labels.join(',') %>
+                            </td>
+                            <td>
+                                <%= resource.is_public === 1 ? '是':'否' %>
+                            </td>
+                            <td>
+                                <%= resource.pageview_num %>
+                            </td>
+                            <td>
+                                <%= resource.download_num %>
+                            </td>
+                        </tr>
+                        <% } )%>
+                </tbody>
+            </table>
+            <div>
+                <ul class="pagination">
+                    <li>
+                        <span class="pull-left">
+                            <%= count %> 条数据</span>
+                    </li>
+                    <% for (let i = 1; i <= Math.ceil(count/10); i++ ){  %>
+                        <li class="<%= i === page ? 'active': ''%>">
+                            <a href="?page=<%=i%>">
+                                <%=i%>
+                            </a>
+                        </li>
+                        <%  }  %>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+
+</html>

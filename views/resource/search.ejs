@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <header class="navbar navbar-inverse navbar-static-top">
+        <div class="container">
+            <div class="navbar-header">
+                <span class="navbar-brand">
+                    <%= title %>
+                </span>
+            </div>
+            <div class="navbar-collapse collapse">
+                &nbsp;
+            </div>
+        </div>
+    </header>
+    <div class="container" id="app">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="input-group">
+                    <input type="text" class="form-control input-lg" placeholder="" name="q" v-model="q" @keyup.enter="search()">
+                    <span class="input-group-btn">
+                        <button class="btn btn-success btn-lg" type="button" @click="search()" :disabled="searching === 1">搜索资源</button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-xs-12" style="padding-top: 8px;padding-bottom: 8px;">
+                <label style="margin-right:10px;" for="c_all">
+                    <input type="radio" value="0" checked v-model="category" id="c_all"> 全部
+                </label>
+                <label style="margin-right:10px;" for="c_courseware">
+                    <input type="radio" value="1" checked v-model="category" id="c_courseware"> 课件
+                </label>
+                <label style="margin-right:10px;" for="c_video">
+                    <input type="radio" value="2" checked v-model="category" id="c_video"> 视频
+                </label>
+                <label style="margin-right:10px;" for="c_teaching_plan">
+                    <input type="radio" value="3" checked v-model="category" id="c_teaching_plan"> 教案
+                </label>
+                <label style="margin-right:10px;" for="c_examination_paper">
+                    <input type="radio" value="4" checked v-model="category" id="c_examination_paper"> 试卷
+                </label>
+                <label style="margin-right:10px;" for="c_homework">
+                    <input type="radio" value="5" checked v-model="category" id="c_homework"> 作业
+                </label>
+                <label style="margin-right:10px;" for="c_question">
+                    <input type="radio" value="6" checked v-model="category" id="c_question"> 试题
+                </label>
+                <label style="margin-right:10px;" for="c_code">
+                    <input type="radio" value="7" checked v-model="category" id="c_code"> 代码
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12" style="padding-bottom:20px;">
+                <div class="row" style="padding-top:20px;border-bottom:2px solid #222;">
+                    <div class="col-xs-6" style="font-weight: 700;font-size:24px;line-height:1.5;">搜索结果</div>
+                    <div class="col-xs-6 text-right" style="font-size:16px;line-height:36px;">共
+                        <span class="text-success">{{total}}</span>条记录</div>
+                </div>
+            </div>
+            <div class="col-xs-12" v-for="resource in resources" :key="resource._id" style="border-bottom: 1px solid #cccccc; margin-bottom:15px;">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <a class="h4">{{resource._source.name}}</a>
+                        <span class="label" :class="{'label-primary':resource._source.category% 5 == 4,'label-info':resource._source.category% 5 == 3,'label-warning':resource._source.category% 5 == 2,'label-danger':resource._source.category% 5 == 1,'label-success':resource._source.category% 5 == 0}">{{categories[resource._source.category]}}</span>
+                        <span class="pull-right">评分：{{resource._source.grade.toFixed(1)}}分</span>
+                    </div>
+                    <div class="col-xs-12 tag" style="padding-top: 5px;padding-bottom: 5px;">
+                        <span style="margin-right:8px;"> 标签：{{resource._source.labels.join(',')}} </span>
+                    </div>
+                    <div class="col-xs-12" v-html="resource._source.desc"></div>
+                    <div class="col-xs-12 tag" style="padding-top: 5px;padding-bottom: 5px;">
+                        <span style="margin-right:8px;">{{resource._source.labels.join(',')}}</span>|
+                        <span style="margin-right:8px; margin-left:8px;">{{resource._source.pageview_num}}次浏览</span>|
+                        <span style="margin-right:8px; margin-left:8px;">{{resource._source.score}}积分</span>|
+                        <span style="margin-right:8px; margin-left:8px;">{{resource._source.download_num}}次下载</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12" v-show="total > 0">
+            <ul class="pagination">
+                <li>
+                    <span>{{total}}条数据</span>
+                </li>
+                <li :class="{active: page === item}" v-for="item in Math.ceil(total/10)" :key="item">
+                    <a href="javascript:;" @click="page=item">
+                        {{item}}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <script src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdn.bootcss.com/vue/2.5.13/vue.min.js"></script>
+    <script src="/js/search.js?_=<%- Date.now()%>"></script>
+</body>
+
+</html>

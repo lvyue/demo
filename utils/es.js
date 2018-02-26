@@ -45,6 +45,8 @@ exports.create = function (id, cb) {
                 classify: resource.classify,
                 labels: resource.labels,
                 score: resource.score,
+                grade: resource.grade,
+                _labels: resource.labels.join(' '),
                 pageview_num: resource.pageview_num,
                 download_num: resource.download_num,
                 create_time: moment(resource.create_time).format('YYYY-MM-DD HH:mm:ss'),
@@ -79,3 +81,4 @@ exports.create = function (id, cb) {
         });
     });
 };
+exports.client = client;

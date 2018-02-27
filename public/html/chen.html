@@ -51,11 +51,11 @@
                                     <td>{{rowIndex +1}}</td>
                                     <td>
                                         <span v-if="row.edit ===0">{{row.name}}</span>
-                                        <input type="text" name="name" placeholder="姓名" v-model="row.name" v-if="row.edit ===1">
+                                        <input class="form-control" type="text" name="name" placeholder="姓名" v-model="row.name" v-if="row.edit ===1">
                                     </td>
                                     <td>
                                         <span v-if="row.edit ===0">{{row.age}}</span>
-                                        <select name="age" v-model="row.age" v-if="row.edit === 1">
+                                        <select name="age" v-model="row.age" v-if="row.edit === 1" class="form-control">
                                             <option :value="num" v-for="num in 100" :key="num">{{num}}</option>
                                         </select>
                                     </td>

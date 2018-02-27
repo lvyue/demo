@@ -31,8 +31,9 @@ new Vue({
         },
         addRow: function (table) {
             table.rows.push({
-                'name': '熊大' + Math.ceil(Math.random() * 100) + '号',
-                'age': Math.ceil(Math.random() * 100)
+                'name': '',
+                'age': 1,
+                'edit': 1,
             });
         },
         editRow: function (row) {
@@ -41,6 +42,9 @@ new Vue({
         },
         delRow: function (table, index) {
             table.rows.splice(index, 1);
+        },
+        saveRow: function (row) {
+            row.edit = 0;
         }
     }
 });

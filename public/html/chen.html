@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>臣总DEMO</title>
+    <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <header class="navbar navbar-inverse navbar-static-top">
+        <div class="container">
+            <div class="navbar-header">
+                <span class="navbar-brand">
+                    臣总DEMO
+                </span>
+            </div>
+            <div class="navbar-collapse collapse">
+                &nbsp;
+            </div>
+        </div>
+    </header>
+    <div class="container" id="app">
+        <div class="row">
+            <div class="col-xs-12" style="border-bottom: 2px solid #ccc;margin-bottom:10px;">
+                <div class="row">
+                    <button class="btn btn-primary" @click="addTable()" style="margin-bottom:10px;">新增表格</button>
+                </div>
+            </div>
+            <div class="col-xs-12" style="border-bottom: 2px solid #ccc;margin-bottom:10px;" v-for="(table,index) in tables">
+                <div class="row" style="margin-bottom:10px;">
+                    <div class="col-xs-12">
+                        <button class="btn btn-primary" @click="addRow(table)">新增数据项</button>
+                        <button class="btn btn-success" @click="saveTable(table)">保存数据</button>
+                        <button class="btn btn-danger" @click="delTable(index)">删除表格</button>
+                    </div>
+                    <div class="col-xs-12">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>姓名</th>
+                                    <th>年龄</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(row,rowIndex) in table.rows">
+                                    <td>{{rowIndex +1}}</td>
+                                    <td>{{row.name}}</td>
+                                    <td>{{row.age}}</td>
+                                    <td>
+                                        <a href="#" @click="editRow(row)" class="btn btn-warning btn-sm">编辑</a>
+                                        <a href="#" @click="delRow(table,rowIndex)" class="btn btn-danger btn-sm">删除</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdn.bootcss.com/vue/2.5.13/vue.min.js"></script>
+    <script src="/js/chen.js?_=<%- Date.now()%>"></script>
+</body>
+
+</html>

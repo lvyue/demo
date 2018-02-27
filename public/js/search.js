@@ -1,5 +1,5 @@
 'use static';
-
+/* eslint-disable no-undef */
 new Vue({
     el: '#app',
     data: function () {

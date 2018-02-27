@@ -3,6 +3,7 @@ const es = require('../utils/es');
 const models = require('../models');
 const Resource = models.Resource;
 // const Schema = models.Schema;
+const debug = require('debug')('es');
 
 const RP = {};
 
@@ -30,6 +31,44 @@ RP.insert = function (resource, cb) {
         cb(null, res);
     });
 };
+RP.update = function (id, resource, cb) {
+    if (_.isFunction(resource)) {
+        cb = resource;
+        resource = null;
+    }
+    if (!_.isFunction(cb)) {
+        cb = _.noop;
+    }
+    if (!_.isObject(resource) || _.isEmpty(resource)) {
+        return cb(new Error('Resource is not an  object type or empty!'));
+    }
+    debug(resource);
+    Resource.findByIdAndUpdate({
+        '_id': id
+    }, {
+        '$set': resource
+    }, (err, res) => {
+        if (err)
+            return cb(err);
+        if (resource.is_public === 2) {
+            if (res.is_public === 1) { // 移除
+                es.delete(id, debug);
+            }
+        } else {
+            if (res.is_public === 2) { // 新增
+                es.create(res._id, debug);
+            } else { // 更新: 删除并重建
+                es.delete(id, err => {
+                    if (err)
+                        return debug(err);
+                    es.create(id, debug);
+                });
+            }
+        }
+        cb(null, res);
+    });
+};
+
 
 
 RP.query = function (query, select, options, callback) {
@@ -138,5 +177,130 @@ RP.count = function (query, callback) {
     Resource.count(query, callback);
 };
 
+RP.offline = function (id, callback) {
+    Resource.update({
+        '_id': id,
+        'is_public': 1
+    }, {
+        '$set': {
+            'is_public': 2
+        }
+    }, (err, rs) => {
+        if (err)
+            return callback(err);
+        debug(rs);
+        if (rs.nModified >= 1) {
+            es.delete(id, debug);
+        }
+        callback(null, rs);
+    });
+};
+
+RP.online = function (id, callback) {
+    Resource.update({
+        '_id': id,
+        'is_public': 2
+    }, {
+        '$set': {
+            'is_public': 1
+        }
+    }, (err, rs) => {
+        if (err)
+            return callback(err);
+        debug(rs);
+        if (rs.nModified >= 1) {
+            es.create(id, debug);
+        }
+        callback(null, rs);
+    });
+};
+
+RP.download = function (id, callback) {
+    Resource.findOneAndUpdate({
+        '_id': id,
+        'status': {
+            '$ne': -1
+        }
+    }, {
+        '$inc': {
+            'download_num': 1
+        }
+    }, {
+        new: true,
+        fields: {
+            id: 1,
+            is_public: 1,
+            download_num: 1
+        }
+    }, (err, res) => {
+        if (err)
+            return callback(err);
+        debug(res);
+        if (res.is_public === 1) {
+            es.update(id, {
+                download_num: res.download_num
+            }, debug);
+        }
+        callback(null, res);
+    });
+};
+
+RP.pageview = function (id, callback) {
+    Resource.findOneAndUpdate({
+        '_id': id,
+        'status': {
+            '$ne': -1
+        }
+    }, {
+        '$inc': {
+            'pageview_num': 1
+        }
+    }, {
+        new: true,
+        fields: {
+            id: 1,
+            is_public: 1,
+            pageview_num: 1
+        }
+    }, (err, res) => {
+        if (err)
+            return callback(err);
+        debug(res);
+        if (res.is_public === 1) {
+            es.update(id, {
+                pageview_num: res.pageview_num
+            }, debug);
+        }
+        callback(null, res);
+    });
+};
+
+
+RP.delete = function (id, callback) {
+    Resource.findOneAndUpdate({
+        '_id': id,
+        'status': {
+            '$ne': -1
+        }
+    }, {
+        '$set': {
+            'status': -1
+        }
+    }, {
+        new: true,
+        fields: {
+            id: 1,
+            is_public: 1,
+        }
+    }, (err, res) => {
+        if (err)
+            return callback(err);
+        debug(res);
+        if (res && res.is_public === 1) {
+            es.delete(id, debug);
+        }
+        callback(null, res);
+    });
+};
 
 module.exports = RP;

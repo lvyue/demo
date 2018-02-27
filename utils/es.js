@@ -81,4 +81,23 @@ exports.create = function (id, cb) {
         });
     });
 };
+
+exports.delete = function (id, callback) {
+    client.delete({
+        index: config.es.index,
+        type: config.es.type,
+        id: id.toString()
+    }, callback);
+};
+
+exports.update = function (id, params, callback) {
+    client.update({
+        index: config.es.index,
+        type: config.es.type,
+        id: id.toString(),
+        body: {
+            doc: params
+        }
+    }, callback);
+};
 exports.client = client;

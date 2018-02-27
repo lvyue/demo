@@ -9,39 +9,36 @@ const es = require('../utils/es');
 
 // 资源列表
 router.get('/', (req, res) => {
-    let page = Number(req.query.page || '1');
-    page = Math.ceil(isNaN(page) ? 1 : page < 1 ? 1 : page);
-    let query = {
-        status: {
-            '$ne': -1
+    // let page = Number(req.query.page || '1');
+    // page = Math.ceil(isNaN(page) ? 1 : page < 1 ? 1 : page);
+    // let query = {
+    //     status: {
+    //         '$ne': -1
+    //     }
+    // };
+    // const proxy = eventproxy.create(['count', 'resources'], function (count, resources) {
+    //     debug(JSON.stringify(resources));
+    //     debug(JSON.stringify(count));
+    res.render('resource/list', {
+        title: '资源列表',
+        categories: {
+            1: '课件',
+            2: '视频',
+            3: '教案',
+            4: '试卷',
+            5: '作业',
+            6: '试题',
+            7: '代码'
         }
-    };
-    const proxy = eventproxy.create(['count', 'resources'], function (count, resources) {
-        debug(JSON.stringify(resources));
-        debug(JSON.stringify(count));
-        res.render('resource/list', {
-            title: '资源列表',
-            count: count,
-            page: page,
-            resources: resources || [],
-            categories: {
-                1: '课件',
-                2: '视频',
-                3: '教案',
-                4: '试卷',
-                5: '作业',
-                6: '试题',
-                7: '代码'
-            }
-        });
     });
-    ResourceProxy.count(query, proxy.done('count'));
-    ResourceProxy.query(query, {
-        desc: 0
-    }, {
-        skip: (page - 1) * 10,
-        limit: 10
-    }, proxy.done('resources'));
+    // });
+    // ResourceProxy.count(query, proxy.done('count'));
+    // ResourceProxy.query(query, {
+    //     desc: 0
+    // }, {
+    //     skip: (page - 1) * 10,
+    //     limit: 10
+    // }, proxy.done('resources'));
 
 });
 

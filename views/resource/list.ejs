@@ -7,6 +7,7 @@
     </title>
     <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <!-- <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" rel="stylesheet"> -->
+    <link href="//cdn.bootcss.com/layer/3.1.0/theme/default/layer.css" rel="stylesheet">
 </head>
 
 <body>
@@ -24,74 +25,153 @@
     </header>
     <div class="container" id="app">
         <div class="row">
-            <table class="table" border="0" cellspacing="0">
-                <thead>
-                    <tr>
-                        <td>序号</td>
-                        <td>名称</td>
-                        <td>类型</td>
-                        <td>下载分</td>
-                        <td>得分</td>
-                        <td>标签</td>
-                        <td>发布</td>
-                        <td>浏览量</td>
-                        <td>下载量</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% resources.forEach( (resource,index) => { %>
+            <div class="col-xs-12">
+                <button type="button" class="btn btn-success btn-sm" @click="add()">
+                    <i class="glyphicon glyphicon-plus"></i> 添加资源</button>
+                <a href="/resources/search" target="_blank" class="btn btn-info btn-sm">
+                    <i class="glyphicon glyphicon-search"></i> 搜索资源</a>
+            </div>
+            <div class="col-xs-12">
+                <table class="table" border="0" cellspacing="0">
+                    <thead>
                         <tr>
+                            <th>序号</th>
+                            <th>名称</th>
+                            <th>类型</th>
+                            <th>下载分</th>
+                            <th>得分</th>
+                            <th>发布</th>
+                            <th>浏览量</th>
+                            <th>下载量</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(resource,index) in resources" :key="resource._id">
                             <td>
-                                <%= index+1 + (page -1)*10%>
+                                {{ index+1 + (page -1)*10 }}
                             </td>
                             <td>
-                                <%= resource.name %>
+                                {{ resource.name }}
                             </td>
 
                             <td>
-                                <%= categories[resource.category] %>
+                                {{ categories[resource.category] }}
                             </td>
                             <td>
-                                <%= resource.score %>
+                                {{ resource.score }}
                             </td>
                             <td>
-                                <%= resource.grade.toFixed(1) %>
+                                {{ resource.grade.toFixed(1) }}
                             </td>
                             <td>
-                                <%= resource.labels.join(',') %>
+                                {{ resource.is_public === 1 ? '是':'否' }}
                             </td>
                             <td>
-                                <%= resource.is_public === 1 ? '是':'否' %>
+                                {{ resource.pageview_num }}
                             </td>
                             <td>
-                                <%= resource.pageview_num %>
+                                {{ resource.download_num }}
                             </td>
                             <td>
-                                <%= resource.download_num %>
+                                <a href="javascript:;" @click="edit(resource)" class="btn btn-xs btn-warning">修改</a>
+                                <a href="javascript:;" @click="online(resource)" v-if="resource.is_public === 2" class="btn btn-xs btn-success">上线</a>
+                                <a href="javascript:;" @click="offline(resource)" v-if="resource.is_public === 1" class="btn btn-xs btn-default">下线</a>
+                                <a href="javascript:;" @click="del(resource)" class="btn btn-xs btn-danger">删除</a>
+                                <a href="javascript:;" @click="pageview(resource)" class="btn btn-xs btn-info">浏览</a>
+                                <a href="javascript:;" @click="download(resource)" class="btn btn-xs btn-primary">下载</a>
                             </td>
                         </tr>
-                        <% } )%>
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
             <div>
                 <ul class="pagination">
                     <li>
-                        <span class="pull-left">
-                            <%= count %> 条数据</span>
+                        <span class="pull-left">{{total}}条数据</span>
                     </li>
-                    <% for (let i = 1; i <= Math.ceil(count/10); i++ ){  %>
-                        <li class="<%= i === page ? 'active': ''%>">
-                            <a href="?page=<%=i%>">
-                                <%=i%>
-                            </a>
-                        </li>
-                        <%  }  %>
+                    <li v-for="num in Math.ceil(total/10)" :class="{'active': num === page }" @click="go(num)">
+                        <span class="pull-left">{{num}}</span>
+                    </li>
                 </ul>
             </div>
+        </div>
+        <div>
+            <form id="resource-upsert-form" style="padding:15px;max-width:600px;" v-show="upsert === 1">
+                <div class="form-group">
+                    <label for="resourceName">资源名称</label>
+                    <input type="text" name="name" id="resourceName" class="form-control" v-model="resource.name" placeholder="资源名称">
+                </div>
+                <div class="form-group">
+                    <label for="resourceName">资源类型</label>
+                    <div class="form-control">
+                        <label style="margin-right:10px;" for="c_courseware">
+                            <input type="radio" value="1" v-model="resource.category" id="c_courseware"> 课件
+                        </label>
+                        <label style="margin-right:10px;" for="c_video">
+                            <input type="radio" value="2" v-model="resource.category" id="c_video"> 视频
+                        </label>
+                        <label style="margin-right:10px;" for="c_teaching_plan">
+                            <input type="radio" value="3" v-model="resource.category" id="c_teaching_plan"> 教案
+                        </label>
+                        <label style="margin-right:10px;" for="c_examination_paper">
+                            <input type="radio" value="4" v-model="resource.category" id="c_examination_paper"> 试卷
+                        </label>
+                        <label style="margin-right:10px;" for="c_homework">
+                            <input type="radio" value="5" v-model="resource.category" id="c_homework"> 作业
+                        </label>
+                        <label style="margin-right:10px;" for="c_question">
+                            <input type="radio" value="6" v-model="resource.category" id="c_question"> 试题
+                        </label>
+                        <label style="margin-right:10px;" for="c_code">
+                            <input type="radio" value="7" v-model="resource.category" id="c_code"> 代码
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="resourceName">发布资源</label>
+                    <div class="form-control">
+                        <label style="margin-right:10px;" for="is_public_y">
+                            <input type="radio" value="1" v-model="resource.is_public" id="is_public_y"> 是
+                        </label>
+                        <label style="margin-right:10px;" for="is_public_n">
+                            <input type="radio" value="2" v-model="resource.is_public" id="is_public_n"> 否
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="resourceName">标签：</label>
+                    <div style="padding: 10px 0;">
+                        <span v-for="(label,index) in resource.labels" class="btn btn-xs" @click="removeTag(index)" :class="{'btn-info': index % 4 === 3,'btn-success': index % 4 === 2,'btn-warning': index % 4 === 1,'btn-primary': index % 4 === 0}"
+                            style="margin-right:5px;">{{label}}|x</span>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="input-group">
+                                <input type="text" class="form-control input-sm" placeholder="请输入标签" v-model="tag" @keyup.enter="addTag()">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-success btn-sm" type="button" class="btn btn-success" @click="addTag()">添加</button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="resourceName">资源描述：</label>
+                    <textarea name="desc" v-model="resource.desc" cols="30" rows="5" style="resize:none;display:block;width: 100%;padding: 15px;line-height: 25px;"></textarea>
+                </div>
+                <div class="text-center" style="padding-top: 15px;">
+                    <button type="button" class="btn btn-default" @click="cancelEdit()">取消</button>
+                    <button type="button" class="btn btn-success" @click="save()">保存</button>
+                </div>
+            </form>
         </div>
     </div>
     <script src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
     <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdn.bootcss.com/vue/2.5.13/vue.min.js"></script>
+    <script src="//cdn.bootcss.com/layer/3.1.0/layer.js"></script>
+    <script src="/js/resource.js?_=<%- Date.now()%>"></script>
 </body>
 
 </html>

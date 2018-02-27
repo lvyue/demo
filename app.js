@@ -26,7 +26,7 @@ app.use(logger('dev'));
 // }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
-    extended: false
+    extended: true
 }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -39,6 +39,7 @@ app.use('/convert', convert);
 app.use('/analyze', analyze);
 app.use('/downloads', download);
 app.use('/resources', resource);
+app.use('/api', require('./routes/api/mapping'));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

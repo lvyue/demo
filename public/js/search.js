@@ -42,7 +42,7 @@ new Vue({
             var that = this;
             that.searching = 1;
             $.ajax({
-                url: '/resources/_search',
+                url: '/api/resources/search',
                 type: 'GET',
                 dataType: 'json',
                 cache: false,

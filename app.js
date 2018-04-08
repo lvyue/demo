@@ -11,6 +11,7 @@ var convert = require('./routes/convert');
 var analyze = require('./routes/analyze');
 var download = require('./routes/download');
 var resource = require('./routes/resource');
+var diff = require('./routes/diff');
 
 var app = express();
 
@@ -19,15 +20,17 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 // app.use(bodyParser({
 // 	uploadDir: './upload/origin'
 // }));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-    extended: true
-}));
+app.use(
+    bodyParser.urlencoded({
+        extended: true
+    })
+);
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/upload', express.static(path.join(__dirname, 'upload')));
@@ -39,6 +42,7 @@ app.use('/convert', convert);
 app.use('/analyze', analyze);
 app.use('/downloads', download);
 app.use('/resources', resource);
+app.use('/diff', diff);
 app.use('/api', require('./routes/api/mapping'));
 
 // catch 404 and forward to error handler

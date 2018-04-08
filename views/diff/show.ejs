@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>
+    <%= title %>
+  </title>
+  <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .repeat-rate-content {
+      border: 1px solid #ccc;
+    }
+    
+    .diff-content {
+      line-height: 30px;
+      font-size: 16px;
+      position: relative;
+    }
+    .diff {
+      position: relative;
+    }
+    .diff .title {
+      padding: 0;
+      margin: 0;
+      line-height:  80px;
+    }
+    .diff .rate {
+      position: absolute;
+      width: 80px; 
+      height: 80px; 
+      left: 0;
+      top: 0;
+      z-index: 1;
+    }
+    .diff select {
+      height: 30px;
+      margin-bottom: 10px; 
+    }
+    .diff .rate .bg{
+      display: block;
+      color: #fff;
+      width: 0; 
+      height: 0; 
+      border-top: 80px solid red; 
+      border-right: 80px solid transparent;
+      text-align: center;
+      left: 0;
+      top: 0;
+      z-index: 1;
+    }
+    .diff .rate .num {
+      position: absolute;
+      display: block;
+      color: #fff;
+      width: 80px; 
+      height: 80px; 
+      line-height: 80px;
+      text-align: center;
+      left: -12px;
+      top:  -12px;
+      z-index: 2;
+      font-style: normal;
+      font-size: 16px;
+      transform: rotate(-45deg);
+    }
+  .diff-content em {
+    color: #f00;
+  }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <header class="navbar navbar-inverse navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <span class="navbar-brand">
+            <%= title %>
+          </span>
+        </div>
+        <div class="navbar-collapse collapse">
+          &nbsp;
+        </div>
+      </div>
+    </header>
+    <div class="container repeat-rate-content">
+      <div class="row">
+        <div class="col-xs-6 diff">
+          <span class="rate"> <i class="bg"></i><i class="num">{{rate}}</i> </span>
+          <h4 class=" title text-center">{{attach.name}}</h4>
+          <div class="text-center" style="height: 40px;"></div>
+          <p class="diff-content" v-html="source.content">
+          </p>
+        </div>
+        <div class="col-xs-6 diff">
+            <h4 class=" title text-center">{{target.file.name}}</h4>
+            <div class="text-center">
+              <select v-model="target" >
+                  <option :value="t" v-for=" t in targets">{{t.file.name}}({{t.rate}})</option> 
+              </select>
+            </div>
+            <p class="diff-content" v-html="target.target">
+            </p>
+          </div>
+      </div>
+    </div>
+    <textarea  id="json" style="display: none;">
+        <%- JSON.stringify(attach)%>
+      </textarea>
+  </div>
+  <script src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="//cdn.bootcss.com/vue/2.5.13/vue.min.js"></script>
+  <script src="/js/attach.js?_=<%- Date.now()%>"></script>
+</body>
+
+</html>

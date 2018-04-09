@@ -1,5 +1,5 @@
 'use static';
-var attach = JSON.parse($.trim($('#json').val()));
+window.attach = JSON.parse($.trim($('#json').val()));
 /* eslint-disable no-undef */
 new Vue({
     el: '#app',
@@ -14,7 +14,7 @@ new Vue({
     },
     mounted: function () {
         let that = this;
-        that.attach = attach;
+        that.attach = window.attach;
         that.targets = that.attach.rates.map(r => {
             r.rate = (r.rate * 100).toFixed(2) + '%';
             return r;

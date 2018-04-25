@@ -13,10 +13,10 @@ router.get('/', (req, res) => {
     page = Math.ceil(isNaN(page) ? 1 : page < 1 ? 1 : page);
     let query = {
         status: {
-            '$ne': -1
+            $ne: -1
         }
     };
-    const proxy = eventproxy.create(['count', 'resources'], function (count, resources) {
+    const proxy = eventproxy.create(['count', 'resources'], function(count, resources) {
         res.json({
             code: 0,
             msg: 'ok',
@@ -35,11 +35,15 @@ router.get('/', (req, res) => {
         });
     });
     ResourceProxy.count(query, proxy.done('count'));
-    ResourceProxy.query(query, {}, {
-        skip: (page - 1) * 10,
-        limit: 10
-    }, proxy.done('resources'));
-
+    ResourceProxy.query(
+        query,
+        {},
+        {
+            skip: (page - 1) * 10,
+            limit: 10
+        },
+        proxy.done('resources')
+    );
 });
 
 // 资源搜索接口
@@ -52,8 +56,8 @@ router.get('/search', (req, res) => {
     let label = req.query.t || ''; // 标签
     let body = {
         query: {},
-        'highlight': {
-            'fields': {
+        highlight: {
+            fields: {
                 '*': {}
             }
         },
@@ -61,7 +65,8 @@ router.get('/search', (req, res) => {
         size: 10
     };
     let filters = [];
-    if (category > 0) { // 设置过滤器
+    if (category > 0) {
+        // 设置过滤器
         filters.push({
             term: {
                 category
@@ -87,48 +92,53 @@ router.get('/search', (req, res) => {
                 }
             };
             if (!_.isEmpty(query)) {
-                body.query.bool.must = [{
-                    'multi_match': {
-                        'query': query,
-                        'fields': ['name', 'desc', '_labels']
+                body.query.bool.must = [
+                    {
+                        multi_match: {
+                            query: query,
+                            fields: ['name', 'desc', '_labels']
+                        }
                     }
-                }];
+                ];
             }
         } else {
             body.query = {
-                'multi_match': {
-                    'query': query,
-                    'fields': ['name', 'desc', '_labels']
+                multi_match: {
+                    query: query,
+                    fields: ['name', 'desc', '_labels']
                 }
             };
         }
     }
     debug('Query:', JSON.stringify(body));
-    es.client.search({
-        index: 'demo',
-        type: 'resource',
-        body: body
-    }, (err, rs) => {
-        res.json({
-            'code': 0,
-            msg: 'ok',
-            data: rs.hits
-        });
-    });
+    es.client.search(
+        {
+            index: 'demo',
+            type: 'resource',
+            body: body
+        },
+        (err, rs) => {
+            res.json({
+                code: 0,
+                msg: 'ok',
+                data: rs.hits
+            });
+        }
+    );
 });
 
 // 添加资源
 router.post('/', (req, res) => {
     let resource = req.body;
-    ResourceProxy.insert(resource, (err) => {
+    ResourceProxy.insert(resource, err => {
         let code = 0;
         if (err) {
             code = 99999;
             debug(err);
         }
         res.json({
-            'code': code,
-            'msg': 'ok'
+            code: code,
+            msg: 'ok'
         });
     });
 });
@@ -136,45 +146,45 @@ router.post('/', (req, res) => {
 // 修改资源
 router.put('/:_id', (req, res) => {
     let resource = req.body;
-    ResourceProxy.update(req.params._id, resource, (err) => {
+    ResourceProxy.update(req.params._id, resource, err => {
         let code = 0;
         if (err) {
             code = 99999;
             debug(err);
         }
         res.json({
-            'code': code,
-            'msg': 'ok'
+            code: code,
+            msg: 'ok'
         });
     });
 });
 
 // 添加资源
 router.put('/:_id/online', (req, res) => {
-    ResourceProxy.online(req.params._id, (err) => {
+    ResourceProxy.online(req.params._id, err => {
         let code = 0;
         if (err) {
             code = 99999;
             debug(err);
         }
         res.json({
-            'code': code,
-            'msg': 'ok'
+            code: code,
+            msg: 'ok'
         });
     });
 });
 
 // 添加资源
 router.put('/:_id/offline', (req, res) => {
-    ResourceProxy.offline(req.params._id, (err) => {
+    ResourceProxy.offline(req.params._id, err => {
         let code = 0;
         if (err) {
             code = 99999;
             debug(err);
         }
         res.json({
-            'code': code,
-            'msg': 'ok'
+            code: code,
+            msg: 'ok'
         });
     });
 });
@@ -187,8 +197,8 @@ router.get('/:_id/download', (req, res) => {
             debug(err);
         }
         res.json({
-            'code': code,
-            'msg': 'ok',
+            code: code,
+            msg: 'ok',
             data: rs
         });
     });
@@ -203,29 +213,26 @@ router.get('/:_id/pageview', (req, res) => {
             debug(err);
         }
         res.json({
-            'code': code,
-            'msg': 'ok',
+            code: code,
+            msg: 'ok',
             data: rs
         });
     });
 });
 
-
 // 添加资源
 router.delete('/:_id', (req, res) => {
-    ResourceProxy.delete(req.params._id, (err) => {
+    ResourceProxy.delete(req.params._id, err => {
         let code = 0;
         if (err) {
             code = 99999;
             debug(err);
         }
         res.json({
-            'code': code,
-            'msg': 'ok'
+            code: code,
+            msg: 'ok'
         });
     });
 });
-
-
 
 module.exports = router;

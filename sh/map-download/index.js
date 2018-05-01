@@ -3,8 +3,8 @@ const HTTP = require('http');
 const FS = require('fs');
 const Path = require('path');
 Async.parallelLimit(
-    Array(300).fill(1).map((v, index) => {
-        let i = index + 740;
+    Array(200).fill(1).map((v, index) => {
+        let i = index + 1030;
         let name = `${i}.jpg`;
         if (i < 10) {
             name = `00${i}.jpg`;
@@ -12,7 +12,7 @@ Async.parallelLimit(
             name = `0${i}.jpg`;
         }
         const link = `http://lishi.zhuixue.net/images/ditu/${name}`;
-        return function(done) {
+        return function (done) {
             HTTP.get(link, res => {
                 let buf = [];
                 let length = 0;

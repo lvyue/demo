@@ -4,7 +4,7 @@
             "name": "demo",
             "script": "bin/www",
             "cwd": "",
-            "exec_mod": "cluster",
+            "exec_mode": "cluster",
             "instances": 0,
             "max_memory_restart": "256M",
             "autorestart": true,

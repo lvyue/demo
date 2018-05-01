@@ -1,0 +1,16 @@
+{
+    "app": [
+        {
+            "name": "demo",
+            "script": "bin/www",
+            "cwd": "",
+            "exec_mod": "cluster",
+            "instances": 0,
+            "max_memory_restart": "256M",
+            "autorestart": true,
+            "node_args": [],
+            "args": [],
+            "env": {}
+        }
+    ]
+}

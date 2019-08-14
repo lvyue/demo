@@ -212,7 +212,7 @@ router.get('/:file', (req, res) => {
                             const destFileName = sourcePath.replace(/.*(\.[a-zA-Z0-9]+)$/, `${UUID.v1()}$1`);
                             const destFilePath = path.join(previewPath, destFileName);
                             _htmls.push(`<img src="/upload/preview/${destFileName}">`);
-                            fs.writeFile(destFilePath, word.readFile(path.join('word', sourcePath))); // 提取资源
+                            fs.writeFile(destFilePath, word.readFile(path.join('word', sourcePath)),console.log); // 提取资源
                         }
                     } else if (wr['w:object']) {
                         // TODO 处理图片

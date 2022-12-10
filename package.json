@@ -18,7 +18,7 @@
     "ejs": "~2.5.7",
     "elasticsearch": "^14.2.2",
     "eventproxy": "^1.0.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "jsonwebtoken": "^8.1.1",
     "lib-unoconv": "^0.1.2",
     "libwmf": "^0.1.1",
